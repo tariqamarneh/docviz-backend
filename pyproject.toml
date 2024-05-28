@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "ai_gpt_task"
+version = "0.1.0"
+description = ""
+authors = ["tariqamarneh <tariqs.naser@gmail.com>"]
+readme = "README.md"
+packages = [{include = 'app'}]
+
+
+[tool.poetry.dependencies]
+python = "^3.12"
+uvicorn = "^0.30.0"
+fastapi = "^0.111.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+dev = "runserver:dev"
+start = "runserver:start"
