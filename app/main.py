@@ -3,18 +3,18 @@ from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.common.logging.logger import file_logging
+from app.common.logging.logger import mongo_logger
 from app.common.middleware.fastapi_middlewar import Middleware
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    file_logging.info("Starting up...")
+    mongo_logger.info("Starting up...")
     yield
-    file_logging.info("Shutting down...")
+    mongo_logger.info("Shutting down...")
 
 
 app = FastAPI(
-    title="",
+    title="docViz",
     summary="",
     description="",
     version="0.1",
@@ -38,13 +38,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.add_middleware(Middleware)
-app.include_router()
+# app.include_router()
 
 
 
 @app.get("/")
 async def root():
-    return JSONResponse(content="Welcome to  API's")
+    return JSONResponse(content="Welcome to mdocViz API's")
 
 
 @app.get("/check_health")

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ai_gpt_task"
+name = "docviz"
 version = "0.1.0"
 description = ""
 authors = ["tariqamarneh <tariqs.naser@gmail.com>"]
@@ -9,8 +9,10 @@ packages = [{include = 'app'}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-uvicorn = "^0.30.0"
+pymongo = "^4.7.2"
+motor = "^3.4.0"
 fastapi = "^0.111.0"
+uvicorn = "^0.30.0"
 
 
 [build-system]

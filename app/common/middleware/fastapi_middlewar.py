@@ -5,8 +5,8 @@ from collections import defaultdict
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from app.common.schemas.logging_schema import LoggingSchema
-from app.common.logging.logger import file_logging
+from app.common.schemas.logging_schema import RouteLoggingSchema
+from app.common.logging.logger import mongo_route_logger
 
 
 class Middleware(BaseHTTPMiddleware):
@@ -14,14 +14,14 @@ class Middleware(BaseHTTPMiddleware):
         super().__init__(app)
         self.rate_limit_records: Dict[str, float] = defaultdict(float)
 
-    async def log_message(self, message: LoggingSchema):
-        file_logging.info(message)
+    async def log_message(self, message: RouteLoggingSchema):
+        mongo_route_logger.info(message.model_dump())
 
     async def dispatch(self, request: Request, call_next):
         client_ip = request.client.host
         current_time = time.time()
         if (
-            request.url.path not in ["/docs", "/openapi.json"]
+            request.url.path not in ["/docs", "/openapi.json", '/favicon.ico']
             and current_time - self.rate_limit_records[client_ip] < 1
         ):
             return Response(content="Rate limit exceeded", status_code=429)
@@ -39,7 +39,7 @@ class Middleware(BaseHTTPMiddleware):
             response.headers.append(header, value)
 
         await self.log_message(
-            LoggingSchema(
+            RouteLoggingSchema(
                 method=method, url=path, host=client_ip, process_time=process_time
             )
         )
