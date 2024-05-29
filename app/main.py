@@ -3,8 +3,10 @@ from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.routes.user import router as user_router
 from app.common.logging.logger import mongo_logger
 from app.common.middleware.fastapi_middlewar import Middleware
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -38,8 +40,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.add_middleware(Middleware)
-# app.include_router()
-
+app.include_router(user_router, prefix="/users", tags=["users"])
 
 
 @app.get("/")

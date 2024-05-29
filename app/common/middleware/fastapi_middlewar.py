@@ -21,7 +21,7 @@ class Middleware(BaseHTTPMiddleware):
         client_ip = request.client.host
         current_time = time.time()
         if (
-            request.url.path not in ["/docs", "/openapi.json", '/favicon.ico']
+            request.url.path not in ["/docs", "/openapi.json", "/favicon.ico"]
             and current_time - self.rate_limit_records[client_ip] < 1
         ):
             return Response(content="Rate limit exceeded", status_code=429)
