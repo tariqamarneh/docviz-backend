@@ -15,7 +15,7 @@ async def get_user_by_id(user_id: str):
     return await user_collection.find_one({"_id": ObjectId(user_id)})
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

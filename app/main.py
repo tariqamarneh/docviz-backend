@@ -3,14 +3,18 @@ from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.common.database import create_indexes
+from app.auth.dependencies import user_dependency
 from app.routes.user import router as user_router
 from app.common.logging.logger import mongo_logger
+from app.routes.session import router as session_router
 from app.common.middleware.fastapi_middlewar import Middleware
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     mongo_logger.info("Starting up...")
+    await create_indexes()
     yield
     mongo_logger.info("Shutting down...")
 
@@ -41,7 +45,7 @@ app.add_middleware(
 )
 app.add_middleware(Middleware)
 app.include_router(user_router, prefix="/users", tags=["users"])
-
+app.include_router(session_router, prefix="/sessions", tags=["sessions"])
 
 @app.get("/")
 async def root():
