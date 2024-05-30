@@ -1,8 +1,7 @@
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, HTTPException, status
 
-from app.common.models.users import User
-from app.common.models.session import Session
+from app.common.models.sessions import Session
 from app.auth.dependencies import user_dependency
 from app.common.schemas.session_scema import CreateSessionRequest
 from app.auth.session_handlers import (

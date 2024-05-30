@@ -4,10 +4,10 @@ from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.common.database import create_indexes
-from app.auth.dependencies import user_dependency
 from app.routes.user import router as user_router
 from app.common.logging.logger import mongo_logger
 from app.routes.session import router as session_router
+from app.routes.uploadfile import router as uploadfile_router
 from app.common.middleware.fastapi_middlewar import Middleware
 
 
@@ -46,6 +46,7 @@ app.add_middleware(
 app.add_middleware(Middleware)
 app.include_router(user_router, prefix="/users", tags=["users"])
 app.include_router(session_router, prefix="/sessions", tags=["sessions"])
+app.include_router(uploadfile_router, prefix="/files", tags=["files"])
 
 @app.get("/")
 async def root():

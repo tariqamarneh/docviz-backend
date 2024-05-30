@@ -1,7 +1,7 @@
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta, UTC
 
-from app.common.models.session import Session
+from app.common.models.sessions import Session
 from app.common.database import session_collection, user_collection
 
 
