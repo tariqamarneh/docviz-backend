@@ -3,18 +3,19 @@ from fastapi import APIRouter, HTTPException, status
 
 from app.common.models.sessions import Session
 from app.auth.dependencies import user_dependency
-from app.common.schemas.session_scema import CreateSessionRequest
+from app.common.schemas.session_schema import CreateSessionRequest
 from app.auth.session_handlers import (
     create_session,
     get_session,
     delete_session,
-    get_sessions_by_email,
+    get_sessions_by_user_id,
+    update_session,
 )
 
 router = APIRouter()
 
 
-@router.post("/", response_model=Session)
+@router.post("/create", response_model=Session)
 async def create_user_session(
     request: CreateSessionRequest, current_user: user_dependency
 ):
@@ -26,7 +27,7 @@ async def create_user_session(
     return session
 
 
-@router.get("/id/{session_id}", response_model=Session)
+@router.get("/get_by_id/{session_id}", response_model=Session)
 async def get_user_session_by_session_id(
     session_id: str, current_user: user_dependency
 ):
@@ -38,17 +39,32 @@ async def get_user_session_by_session_id(
     return session
 
 
-@router.get("/email/{email}", response_model=list[Session])
-async def get_user_session_by_email(email: str, current_user: user_dependency):
-    sessions = await get_sessions_by_email(email)
-    if not sessions or sessions[0].user_id != current_user.id:
+@router.get("/get_by_user_id", response_model=list[Session])
+async def get_user_sessions_by_euser_id(user_id: str, current_user: user_dependency):
+    sessions = await get_sessions_by_user_id(user_id)
+    if not sessions or str(sessions[0].user_id) != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Session not found"
         )
     return sessions
 
 
-@router.delete("/{session_id}")
+@router.put("/edit/{session_id}")
+async def update_user_session(
+    session_id: str, data: dict, current_user: user_dependency
+):
+    session = await get_session(session_id)
+    if not session or session.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Session not found"
+        )
+    await update_session(session_id, data)
+    return JSONResponse(
+        content="Session updates successfully", status_code=status.HTTP_200_OK
+    )
+
+
+@router.delete("/delete/{session_id}")
 async def delete_user_session(session_id: str, current_user: user_dependency):
     session = await get_session(session_id)
     if not session or session.user_id != current_user.id:

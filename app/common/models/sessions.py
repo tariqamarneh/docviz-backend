@@ -1,10 +1,11 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Any
 from datetime import datetime
 
+
 class Session(BaseModel):
-    id: Optional[str]
-    user_id: str
+    id: Any
+    user_id: Any
     data: dict
     created_at: datetime
     expires_at: datetime
