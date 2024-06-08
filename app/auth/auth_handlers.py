@@ -7,6 +7,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.auth.jwt import create_access_token
 from app.common.models.users import UserInDB
 from app.config import ACCESS_TOKEN_EXPIRE_MINUTES
+from app.common.logging.logger import mongo_logger
 from app.common.schemas.user_schema import UserCreate, Token
 from app.common.database import user_collection, password_collection
 
@@ -39,6 +40,7 @@ async def authenticate_user(email: str, password: str):
 async def create_user(user: UserCreate):
     existing_user = await user_collection.find_one({"email": user.email})
     if existing_user:
+        mongo_logger.warning("Email already registered")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered"
         )
@@ -56,6 +58,7 @@ async def create_user(user: UserCreate):
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = await authenticate_user(form_data.username, form_data.password)
     if not user:
+        mongo_logger.warning("Incorrect email or password")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",

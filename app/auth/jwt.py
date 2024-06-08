@@ -1,7 +1,8 @@
-from datetime import datetime, timedelta, UTC
 from typing import Optional
 from jose import JWTError, jwt
+from datetime import datetime, timedelta, UTC
 
+from app.common.logging.logger import mongo_logger
 from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 
@@ -20,5 +21,6 @@ def decode_access_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
-    except JWTError:
+    except JWTError as e:
+        mongo_logger.error(e)
         return None

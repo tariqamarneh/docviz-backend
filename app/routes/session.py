@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from app.common.models.sessions import Session
 from app.auth.dependencies import user_dependency
+from app.common.logging.logger import mongo_logger
 from app.common.schemas.session_schema import CreateSessionRequest
 from app.auth.session_handlers import (
     create_session,
@@ -33,6 +34,7 @@ async def get_user_session_by_session_id(
 ):
     session = await get_session(session_id)
     if not session or session.user_id != current_user.id:
+        mongo_logger.error("Session not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Session not found"
         )
@@ -43,6 +45,7 @@ async def get_user_session_by_session_id(
 async def get_user_sessions_by_euser_id(user_id: str, current_user: user_dependency):
     sessions = await get_sessions_by_user_id(user_id)
     if not sessions or str(sessions[0].user_id) != current_user.id:
+        mongo_logger.error("Session not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Session not found"
         )
@@ -55,6 +58,7 @@ async def update_user_session(
 ):
     session = await get_session(session_id)
     if not session or session.user_id != current_user.id:
+        mongo_logger.error("Session not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Session not found"
         )
@@ -68,6 +72,7 @@ async def update_user_session(
 async def delete_user_session(session_id: str, current_user: user_dependency):
     session = await get_session(session_id)
     if not session or session.user_id != current_user.id:
+        mongo_logger.error("Session not found")
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Session not found"
         )

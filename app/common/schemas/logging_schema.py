@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
+from  typing import Any
 
 
 class RouteLoggingSchema(BaseModel):
@@ -14,4 +15,4 @@ class LoggingSchema(BaseModel):
     filename: str
     funcName: str
     levelname: str
-    message: str
+    message: Any

@@ -21,7 +21,7 @@ class MongoHandler(logging.Handler):
                 filename=record.filename,
                 funcName=record.funcName,
                 levelname=record.levelname,
-                message=record.msg,
+                message=str(record.msg),
             ).model_dump()
         )
 

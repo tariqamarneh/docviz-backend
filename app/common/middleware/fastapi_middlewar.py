@@ -21,10 +21,21 @@ class Middleware(BaseHTTPMiddleware):
         client_ip = request.client.host
         current_time = time.time()
         if (
-            request.url.path not in ["/docs", "/openapi.json", "/favicon.ico", "/sessions/create", "/files/upload", "/openai/get_summary", "/openai/get_insights", "/users/me"]
+            request.url.path
+            not in [
+                "/favicon.ico",
+                "/sessions/create",
+                "/files/upload",
+                "/openai/get_summary",
+                "/openai/get_insights",
+                "/users/me",
+                "/users/contact",
+            ]
             and current_time - self.rate_limit_records[client_ip] < 1
-            and request.method != 'OPTIONS'
-            and request.method != 'GET'
+            and request.method != "OPTIONS"
+            and request.method != "GET"
+            and request.method != "DELETE"
+
         ):
             return Response(content="Rate limit exceeded", status_code=429)
 

@@ -1,9 +1,10 @@
-import asyncio
 import json
+import asyncio
 from typing import Any, AsyncIterator, Dict, List, Literal, Union, cast
 
-from langchain_core.callbacks import AsyncCallbackHandler
 from langchain_core.outputs import LLMResult
+from langchain_core.callbacks import AsyncCallbackHandler
+
 
 class AsyncIteratorCallbackHandler(AsyncCallbackHandler):
     queue: asyncio.Queue[str]
@@ -12,12 +13,12 @@ class AsyncIteratorCallbackHandler(AsyncCallbackHandler):
     @property
     def always_verbose(self) -> bool:
         return True
-    
+
     def __init__(self) -> None:
         self.queue = asyncio.Queue()
         self.done = asyncio.Event()
         self.flag = False
-        self.key=''
+        self.key = ""
         self.index = 0
 
     async def on_llm_start(
@@ -26,16 +27,22 @@ class AsyncIteratorCallbackHandler(AsyncCallbackHandler):
         self.done.clear()
 
     async def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
-        if token ==  " \"$":
+        if token == ' "$':
             self.flag = True
             self.index = 0
-        if token is not None and token != "" and token != " \"$" and token != '}' and token != '```':
+        if (
+            token is not None
+            and token != ""
+            and token != ' "$'
+            and token != "}"
+            and token != "```"
+        ):
             if self.flag:
                 self.key = token
                 self.flag = False
-            data = {"data":f"{token}", "type":f"{self.key}", "index": self.index}
-            self.queue.put_nowait(json.dumps(data)+'\n')
-        self.index+=1
+            data = {"data": f"{token}", "type": f"{self.key}", "index": self.index}
+            self.queue.put_nowait(json.dumps(data) + "\n")
+        self.index += 1
 
     async def on_llm_end(self, response: LLMResult, **kwargs: Any) -> None:
         self.done.set()
@@ -70,5 +77,3 @@ class AsyncIteratorCallbackHandler(AsyncCallbackHandler):
 
             # Otherwise, the extracted value is a token, which we yield
             yield token_or_done
-
-    

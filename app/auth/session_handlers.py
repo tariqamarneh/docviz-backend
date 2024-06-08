@@ -2,7 +2,7 @@ from bson.objectid import ObjectId
 from datetime import datetime, timedelta, UTC
 
 from app.common.models.sessions import Session
-from app.common.database import session_collection, user_collection
+from app.common.database import session_collection, file_collection
 
 
 async def create_session(user_id: str, data: dict, expires_in_minutes: int) -> Session:
@@ -38,6 +38,7 @@ async def get_session(session_id: str) -> Session:
 
 
 async def delete_session(session_id: str):
+    await file_collection.delete_one({"metadata.session_id": ObjectId(session_id)})
     await session_collection.delete_one({"_id": ObjectId(session_id)})
 
 

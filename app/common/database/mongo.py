@@ -7,6 +7,9 @@ def get_connection():
     connection = AsyncIOMotorClient(MONGO_CONNECTION_STRING)
     return connection
 
+
 def get_gridFS_collection():
-    collection = AsyncIOMotorGridFSBucket(get_connection()['docViz'], collection="files")
+    collection = AsyncIOMotorGridFSBucket(
+        get_connection()["docViz"], collection="files"
+    )
     return collection

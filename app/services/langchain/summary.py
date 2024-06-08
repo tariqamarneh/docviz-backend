@@ -1,15 +1,13 @@
 import json
 import asyncio
 
-from fastapi import HTTPException, status
-from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-from app.services.langchain.callback_handler import AsyncIteratorCallbackHandler
-from app.common.schemas.openai_outout_schema import LLMSummaryOutputSchema
 from app.services.langchain.utils import extract_content
-from app.services.langchain.chain import get_map_llmchain, get_reduce_chain, get_document_insights_chain
+from app.services.langchain.callback_handler import AsyncIteratorCallbackHandler
 from app.auth.session_handlers import get_session, update_session, update_session_insights
+from app.services.langchain.chain import get_map_llmchain, get_reduce_chain, get_document_insights_chain
 
 
 async def generate_summary(file_id: str, session_id:str, callback:AsyncIteratorCallbackHandler):
@@ -44,6 +42,3 @@ async def generate_insights(session_id:str, callback:AsyncIteratorCallbackHandle
     json_data = insights.strip('```json\n').strip('\n```')
     json_data = json.loads(json_data)
     await update_session_insights(session_id=session_id, data=json_data['insights'])
-
-
-    

@@ -1,6 +1,9 @@
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
-from app.common.schemas.openai_outout_schema import LLMSummaryOutputSchema , LLMInsightOutputSchema
+from app.common.schemas.openai_outout_schema import (
+    LLMSummaryOutputSchema,
+    LLMInsightOutputSchema,
+)
 
 map_template = """
 Write a summary of the following content, and extract key phrases from it:
@@ -13,7 +16,7 @@ NOTE:
 
 Summary:
 
-Extracted key phrases:
+Extracted key phrases (seperated by comma):
 
 """
 
@@ -31,11 +34,20 @@ Summarize the above summaries IN DETAILS with all the key details and extract th
 NOTE:
     * At the beginning of the summary, add '$summary'.
     * At the beginning of the key phrases, add '$key'
+    * Key phrases should be seperated by comma.
 """
 
-summary_output_parser = JsonOutputParser(name="Json output parser", pydantic_object=LLMSummaryOutputSchema)
+summary_output_parser = JsonOutputParser(
+    name="Json output parser", pydantic_object=LLMSummaryOutputSchema
+)
 
-reduce_prompt = PromptTemplate(template=reduce_template, input_variables=['doc_summaries'], partial_variables={"format_instructions": summary_output_parser.get_format_instructions()})
+reduce_prompt = PromptTemplate(
+    template=reduce_template,
+    input_variables=["doc_summaries"],
+    partial_variables={
+        "format_instructions": summary_output_parser.get_format_instructions()
+    },
+)
 
 
 document_insights_template = """
@@ -52,5 +64,13 @@ NOTE:
 document_insights:
 
 """
-insight_output_parser = JsonOutputParser(name="Json output parser", pydantic_object=LLMInsightOutputSchema)
-document_insights_prompt = PromptTemplate(template=document_insights_template, input_variables=["summary_key_phrases"], partial_variables={"format_instructions": insight_output_parser.get_format_instructions()})
+insight_output_parser = JsonOutputParser(
+    name="Json output parser", pydantic_object=LLMInsightOutputSchema
+)
+document_insights_prompt = PromptTemplate(
+    template=document_insights_template,
+    input_variables=["summary_key_phrases"],
+    partial_variables={
+        "format_instructions": insight_output_parser.get_format_instructions()
+    },
+)

@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class Metadata(BaseModel):
     user_id: str
     filename: str

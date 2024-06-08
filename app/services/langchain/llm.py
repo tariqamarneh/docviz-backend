@@ -14,6 +14,7 @@ def get_llm():
     )
     return llm
 
+
 def get_stream_llm(callback):
     llm = AzureChatOpenAI(
         name="docVizStreamLLM",
