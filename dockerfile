@@ -14,4 +14,6 @@ RUN poetry install
 
 COPY . .
 
+EXPOSE 8080
+
 CMD ["poetry", "run", "start"]
