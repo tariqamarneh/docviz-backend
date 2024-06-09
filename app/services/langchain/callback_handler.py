@@ -41,7 +41,7 @@ class AsyncIteratorCallbackHandler(AsyncCallbackHandler):
                 self.key = token
                 self.flag = False
             data = {"data": f"{token}", "type": f"{self.key}", "index": self.index}
-            self.queue.put_nowait(json.dumps(data) + "\n")
+            self.queue.put_nowait('data:'+json.dumps(data) + "\n\n")
         self.index += 1
 
     async def on_llm_end(self, response: LLMResult, **kwargs: Any) -> None:

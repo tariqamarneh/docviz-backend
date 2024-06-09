@@ -13,7 +13,6 @@ async def wrap_done(fn: Awaitable, event: asyncio.Event):
         await fn
     except BadRequestError as e:
         mongo_logger.error(e)
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
     finally:
         event.set()
 

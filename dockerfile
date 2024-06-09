@@ -1,19 +1,11 @@
-FROM python:3.12 as python-base
+FROM python:3.12.2
 
-RUN mkdir app
-
-WORKDIR  /app
-
-COPY /pyproject.toml /app
-
-RUN pip3 install poetry
-
-RUN poetry config virtualenvs.create false
-
-RUN poetry install 
+RUN pip install poetry==1.7.1
 
 COPY . .
 
+RUN poetry install
+
 EXPOSE 8080
 
-CMD ["poetry", "run", "start"]
+ENTRYPOINT ["poetry", "run", "start"]
