@@ -2,6 +2,7 @@ import json
 import asyncio
 
 from langchain_core.documents import Document
+from langchain_core.messages import BaseMessage
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 from app.services.langchain.utils import extract_content
@@ -17,9 +18,12 @@ async def generate_summary(file_id: str, session_id:str, callback:AsyncIteratorC
     chunks = splitter.split_documents([document_text])
     chain = get_map_llmchain()
     async def invoke_chain(chunk):
-        result = await chain.ainvoke(chunk)
-        return result
-
+        try:
+            result = await chain.ainvoke(chunk)
+            return result
+        except Exception as e:
+            return BaseMessage(content="This document may violate our content policy.", type="400 bad request")
+        
     tasks = [invoke_chain(chunk) for chunk in chunks]
     
     results = await asyncio.gather(*tasks)
