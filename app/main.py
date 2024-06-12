@@ -33,8 +33,10 @@ origins = [
     "http://localhost",
     "http://localhost:3000",
     "http://localhost:8080",
-    "https://docviz.online/",
-    "https://docviz.azurewebsites.net/",
+    "https://docviz.online",
+    "https://docviz.azurewebsites.net",
+    "https://docviz-backend-bghkhmajahepcnhh.eastus-01.azurewebsites.net"
+    ""
 ]
 
 
