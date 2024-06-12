@@ -48,7 +48,7 @@ app.include_router(openai_router, prefix="/openai", tags=["openai"])
 
 @app.get("/")
 async def root():
-    return JSONResponse(content="Welcome to docViz API's")
+    return JSONResponse(content="Welcome to DocViz API's")
 
 
 @app.get("/check_health")
