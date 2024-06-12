@@ -11,7 +11,7 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '25856988-38b0-4096-a077-01bd4f85bf9f'
-  imageRepository: 'docvizbackend'
+  imageRepository: 'docviz-backend'
   containerRegistry: 'docviz.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/dockerfile'
   tag: '$(Build.BuildId)'
