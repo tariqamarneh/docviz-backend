@@ -37,3 +37,8 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           v1
+    - task: AzureAppServiceManage@0
+      inputs:
+        azureSubscription: 'Visual Studio Enterprise Subscription(1)(560d5ac8-ec23-4426-baf9-aecc9e25ae69)'
+        Action: 'Restart Azure App Service'
+        WebAppName: 'docviz-backend'
