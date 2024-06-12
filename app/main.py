@@ -22,23 +22,30 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="docViz",
-    summary="",
-    description="",
+    summary="Summarize, extract key phrases and insights from your documents with ChatGPT-4o.",
+    description="Explore our document analyzer services tailored to elevate your digital experience. summarize, extract key phrases and insights from your documents with ChatGPT-4o. Revolutionize your interactions with our advanced document analyzer solutions.",
     version="0.1",
     lifespan=lifespan,
     swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"},
 )
 
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "http://localhost:8080",
+    "https://docviz.online/",
+    "https://docviz.azurewebsites.net/",
+]
+
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 app.add_middleware(Middleware)
-
 
 app.include_router(user_router, prefix="/users", tags=["users"])
 app.include_router(session_router, prefix="/sessions", tags=["sessions"])
@@ -48,7 +55,7 @@ app.include_router(openai_router, prefix="/openai", tags=["openai"])
 
 @app.get("/")
 async def root():
-    return JSONResponse(content="Welcome to DocViz API's")
+    return JSONResponse(content="Welcome to DocViz")
 
 
 @app.get("/check_health")
