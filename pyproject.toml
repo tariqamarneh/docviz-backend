@@ -17,10 +17,10 @@ pyjwt = "^2.8.0"
 python-jose = "^3.3.0"
 passlib = "1.7.4"
 bcrypt = "3.2.0"
-pypdf2 = "^3.0.1"
 python-docx = "^1.1.2"
 langchain = "^0.2.1"
 langchain-openai = "^0.1.8"
+pypdf = "^4.2.0"
 
 
 [build-system]
