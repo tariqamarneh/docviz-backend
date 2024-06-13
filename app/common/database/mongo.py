@@ -10,6 +10,6 @@ def get_connection():
 
 def get_gridFS_collection():
     collection = AsyncIOMotorGridFSBucket(
-        get_connection()["docViz"], collection="files"
+        get_connection()["docViz"], bucket_name="files"
     )
     return collection

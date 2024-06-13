@@ -1,7 +1,7 @@
 from io import BytesIO
 
 from docx import Document
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 
 from app.services.uploadfile import get_file, get_file_binary
 
