@@ -1,8 +1,11 @@
 services:
   - type: web
-    name: dockviz-backend
+    name: docviz-backend
     env: python
-    buildCommand: pip install poetry && poetry install
+    buildCommand: |
+      pip install poetry
+      poetry config virtualenvs.create false
+      poetry install --no-interaction --no-ansi
     startCommand: poetry run start
     envVars:
       - key: PYTHON_VERSION
